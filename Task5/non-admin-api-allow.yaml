@@ -34,6 +34,18 @@ items:
                   role: front-end
       egress:
         - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: kube-system
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+            - protocol: TCP
+              port: 53
+        - to:
             - podSelector:
                 matchLabels:
                   role: front-end
@@ -52,6 +64,18 @@ items:
                 matchLabels:
                   role: back-end-api
       egress:
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: kube-system
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+            - protocol: TCP
+              port: 53
         - to:
             - podSelector:
                 matchLabels:
@@ -73,6 +97,18 @@ items:
                   role: admin-front-end
       egress:
         - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: kube-system
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+            - protocol: TCP
+              port: 53
+        - to:
             - podSelector:
                 matchLabels:
                   role: admin-front-end
@@ -91,6 +127,18 @@ items:
                 matchLabels:
                   role: admin-back-end-api
       egress:
+        - to:
+            - namespaceSelector:
+                matchLabels:
+                  kubernetes.io/metadata.name: kube-system
+              podSelector:
+                matchLabels:
+                  k8s-app: kube-dns
+          ports:
+            - protocol: UDP
+              port: 53
+            - protocol: TCP
+              port: 53
         - to:
             - podSelector:
                 matchLabels:
