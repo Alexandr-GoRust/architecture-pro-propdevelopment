@@ -1,0 +1,23 @@
+# Правило 4 (обязательное из ТЗ): readOnlyRootFilesystem: true
+# у каждого контейнера. Четвёртый файл сверх структуры ТЗ — правило
+# «readOnlyRootFilesystem: true обязательно» выделено в отдельный шаблон,
+# чтобы каждое правило имело свой констрейнт и своё сообщение.
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8spodreadonlyrootfilesystem
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPodReadOnlyRootFilesystem
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spodreadonlyrootfs
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          container.securityContext.readOnlyRootFilesystem != true
+          msg := sprintf("контейнер <%v>: требуется readOnlyRootFilesystem: true", [container.name])
+        }

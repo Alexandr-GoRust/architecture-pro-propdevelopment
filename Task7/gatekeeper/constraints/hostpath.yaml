@@ -1,0 +1,14 @@
+# Констрейнт правила 2: deny на поды с hostPath-томами.
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPodHostPath
+metadata:
+  name: no-hostpath
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system

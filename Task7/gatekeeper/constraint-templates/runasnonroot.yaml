@@ -1,0 +1,29 @@
+# Правило 3: только runAsNonRoot: true (уровень контейнера или пода).
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8spodrunasnonroot
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPodRunAsNonRoot
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spodrunasnonroot
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not container_level_nonroot(container)
+          not pod_level_nonroot
+          msg := sprintf("контейнер <%v>: требуется runAsNonRoot: true", [container.name])
+        }
+
+        container_level_nonroot(c) {
+          c.securityContext.runAsNonRoot == true
+        }
+
+        pod_level_nonroot {
+          input.review.object.spec.securityContext.runAsNonRoot == true
+        }
