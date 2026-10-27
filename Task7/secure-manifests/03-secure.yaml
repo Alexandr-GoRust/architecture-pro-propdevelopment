@@ -1,0 +1,24 @@
+# SECURE-аналог 03-root-user-pod: запуск от непривилегированного пользователя
+# (runAsNonRoot: true, UID 10001) вместо root.
+# Ожидаемый результат в audit-zone: ПРИНЯТ.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod-3
+  namespace: audit-zone
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "3600"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]

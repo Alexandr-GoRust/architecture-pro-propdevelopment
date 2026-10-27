@@ -1,0 +1,26 @@
+# Правило 1: запрещено privileged: true (в основных и init-контейнерах).
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
+metadata:
+  name: k8spodprivileged
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sPodPrivileged
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8spodprivileged
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          container.securityContext.privileged == true
+          msg := sprintf("контейнер <%v>: privileged: true запрещён", [container.name])
+        }
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.initContainers[_]
+          container.securityContext.privileged == true
+          msg := sprintf("init-контейнер <%v>: privileged: true запрещён", [container.name])
+        }

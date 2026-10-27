@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-10-26T18:54:06Z",
+  "source_log": "audit/full-audit.log",
+  "description": "Подозрительные события из Kubernetes audit.log (кейс secure-ops, Task6)",
+  "categories": {
+    "secrets_access": [
+      {
+        "ts": "2026-10-26T18:50:07.800689Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "list",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": null,
+        "http_code": null,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:07.802256Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "list",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": null,
+        "http_code": 200,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:07.847676Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "list",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": null,
+        "http_code": null,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:07.848230Z",
+        "user": "minikube-user",
+        "impersonated": "system:serviceaccount:secure-ops:monitoring",
+        "verb": "list",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": null,
+        "http_code": 403,
+        "reason": "Forbidden"
+      },
+      {
+        "ts": "2026-10-26T18:50:35.951183Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "get",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": "legacy-default-token",
+        "http_code": null,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:35.951763Z",
+        "user": "minikube-user",
+        "impersonated": "system:serviceaccount:secure-ops:monitoring",
+        "verb": "get",
+        "resource": "secrets",
+        "subresource": null,
+        "namespace": "kube-system",
+        "name": "legacy-default-token",
+        "http_code": 403,
+        "reason": "Forbidden"
+      }
+    ],
+    "exec_into_pods": [
+      {
+        "ts": "2026-10-26T18:50:08.043535Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "get",
+        "resource": "pods",
+        "subresource": "exec",
+        "namespace": "kube-system",
+        "name": "coredns-559f6c778d-78mpz",
+        "http_code": null,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:08.051820Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "get",
+        "resource": "pods",
+        "subresource": "exec",
+        "namespace": "kube-system",
+        "name": "coredns-559f6c778d-78mpz",
+        "http_code": 101,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:08.067864Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "get",
+        "resource": "pods",
+        "subresource": "exec",
+        "namespace": "kube-system",
+        "name": "coredns-559f6c778d-78mpz",
+        "http_code": 101,
+        "reason": null
+      }
+    ],
+    "privileged_pods": [
+      {
+        "ts": "2026-10-26T18:50:07.934289Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "create",
+        "resource": "pods",
+        "subresource": null,
+        "namespace": "secure-ops",
+        "name": "privileged-pod",
+        "http_code": 201,
+        "reason": null
+      }
+    ],
+    "rolebinding_escalation": [
+      {
+        "ts": "2026-10-26T18:50:08.157025Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "create",
+        "resource": "rolebindings",
+        "subresource": null,
+        "namespace": "secure-ops",
+        "name": "escalate-binding",
+        "http_code": 201,
+        "reason": null
+      }
+    ],
+    "audit_policy_tampering": [
+      {
+        "ts": "2026-10-26T18:50:08.202316Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "create",
+        "resource": "configmaps",
+        "subresource": null,
+        "namespace": "secure-ops",
+        "name": "audit-policy",
+        "http_code": 201,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:08.257501Z",
+        "user": "minikube-user",
+        "impersonated": null,
+        "verb": "delete",
+        "resource": "configmaps",
+        "subresource": null,
+        "namespace": "secure-ops",
+        "name": "audit-policy",
+        "http_code": null,
+        "reason": null
+      },
+      {
+        "ts": "2026-10-26T18:50:08.258081Z",
+        "user": "minikube-user",
+        "impersonated": "admin",
+        "verb": "delete",
+        "resource": "configmaps",
+        "subresource": null,
+        "namespace": "secure-ops",
+        "name": "audit-policy",
+        "http_code": 403,
+        "reason": "Forbidden"
+      }
+    ]
+  },
+  "summary": {
+    "secrets_access": 6,
+    "exec_into_pods": 3,
+    "privileged_pods": 1,
+    "rolebinding_escalation": 1,
+    "audit_policy_tampering": 3
+  }
+}

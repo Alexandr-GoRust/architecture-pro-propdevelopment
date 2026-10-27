@@ -1,0 +1,14 @@
+# НАРУШЕНИЕ: контейнер запускается с privileged: true.
+# Ожидаемый результат в audit-zone: ОТКЛОНЁН (PodSecurity restricted +
+# Gatekeeper-констрейнт no-privileged).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-privileged
+  namespace: audit-zone
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      securityContext:
+        privileged: true

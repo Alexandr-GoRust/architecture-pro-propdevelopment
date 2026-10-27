@@ -1,0 +1,15 @@
+# Констрейнт правила 1: deny на любой под с privileged-контейнером.
+# Системные namespace исключены (сами компоненты Gatekeeper и kube-system).
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPodPrivileged
+metadata:
+  name: no-privileged
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system

@@ -1,0 +1,25 @@
+# Политика аудита для Task7 — та же, что в Task6, с одним исправлением,
+# найденным при анализе инцидента (analysis.md Task6, «Недочёты самой
+# политики аудита»): роли и биндинги живут в группе rbac.authorization.k8s.io,
+# а не в core-группе, поэтому для них добавлена отдельная группа — иначе
+# эскалация привилегий логируется без requestObject.
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+  # Критичные core-ресурсы: полный запрос/ответ
+  - level: RequestResponse
+    verbs: ["create", "delete", "update", "patch", "get", "list"]
+    resources:
+      - group: ""
+        resources: ["pods", "secrets", "configmaps", "serviceaccounts"]
+  # RBAC-объекты (эскалация привилегий) — группа rbac.authorization.k8s.io
+  - level: RequestResponse
+    verbs: ["create", "delete", "update", "patch", "get", "list"]
+    resources:
+      - group: "rbac.authorization.k8s.io"
+        resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+  # Всё остальное: только метаданные
+  - level: Metadata
+    resources:
+      - group: "*"
+        resources: ["*"]

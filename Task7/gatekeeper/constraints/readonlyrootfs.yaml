@@ -1,0 +1,14 @@
+# Констрейнт правила 4: deny на контейнеры с записываемой корневой ФС.
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPodReadOnlyRootFilesystem
+metadata:
+  name: require-readonlyrootfs
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system

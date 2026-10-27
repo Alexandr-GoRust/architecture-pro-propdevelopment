@@ -1,0 +1,14 @@
+# Констрейнт правила 3: deny на поды без runAsNonRoot: true.
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sPodRunAsNonRoot
+metadata:
+  name: require-runasnonroot
+spec:
+  enforcementAction: deny
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system

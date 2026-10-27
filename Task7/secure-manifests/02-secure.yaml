@@ -1,0 +1,30 @@
+# SECURE-аналог 02-hostpath-pod: вместо hostPath — emptyDir (эфемерный том
+# узла, без доступа к ФС хоста). Остальное — профиль restricted.
+# Ожидаемый результат в audit-zone: ПРИНЯТ.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod-2
+  namespace: audit-zone
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "3600"]
+      volumeMounts:
+        - name: tmp-data
+          mountPath: /data
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+  volumes:
+    - name: tmp-data
+      emptyDir: {}

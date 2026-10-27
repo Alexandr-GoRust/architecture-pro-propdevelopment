@@ -1,0 +1,24 @@
+# SECURE-аналог 01-privileged-pod: без privileged, полностью под профиль
+# restricted + правила Gatekeeper (runAsNonRoot, readOnlyRootFilesystem).
+# Ожидаемый результат в audit-zone: ПРИНЯТ.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secure-pod-1
+  namespace: audit-zone
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "3600"]
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]

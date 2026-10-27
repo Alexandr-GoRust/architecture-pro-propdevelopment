@@ -1,0 +1,16 @@
+# НАРУШЕНИЕ: под явно запускается от root (UID 0, runAsNonRoot: false).
+# Ожидаемый результат в audit-zone: ОТКЛОНЁН (PodSecurity restricted +
+# Gatekeeper-констрейнт require-runasnonroot).
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-root-user
+  namespace: audit-zone
+spec:
+  securityContext:
+    runAsUser: 0
+    runAsNonRoot: false
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "3600"]
